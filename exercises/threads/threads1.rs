@@ -1,9 +1,9 @@
 // threads1.rs
 //
-// This program spawns multiple threads that each run for at least 250ms, and
-// each thread returns how much time they took to complete. The program should
-// wait until all the spawned threads have finished and should collect their
-// return values into a vector.
+//此程序生成多个线程，每个线程运行至少250毫秒，以及
+//每个线程返回它们完成所花费的时间。该计划应
+//等待所有生成的线程都完成，并应收集它们的
+//将值返回到向量中。
 //
 // Execute `rustlings hint threads1` or use the `hint` watch subcommand for a
 // hint.
