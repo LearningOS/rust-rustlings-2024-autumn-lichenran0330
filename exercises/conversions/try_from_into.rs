@@ -1,9 +1,9 @@
 // try_from_into.rs
 //
-// TryFrom is a simple and safe type conversion that may fail in a controlled
-// way under some circumstances. Basically, this is the same as From. The main
-// difference is that this should return a Result type instead of the target
-// type itself. You can read more about it at
+//TryFrom是一种简单而安全的类型转换，在受控状态下可能会失败
+//在某些情况下。基本上，这与From相同。主要
+//不同之处在于，这应该返回一个Result类型而不是目标
+//类型本身。您可以在以下网址阅读更多信息
 // https://doc.rust-lang.org/std/convert/trait.TryFrom.html
 //
 // Execute `rustlings hint try_from_into` or use the `hint` watch subcommand for
@@ -18,60 +18,105 @@ struct Color {
     blue: u8,
 }
 
-// We will use this error type for these `TryFrom` conversions.
+//我们将使用此错误类型进行这些“TryFrom”转换。
 #[derive(Debug, PartialEq)]
 enum IntoColorError {
-    // Incorrect length of slice
+    //切片长度不正确
     BadLen,
-    // Integer conversion error
+    //整数转换错误
     IntConversion,
 }
 
-// I AM NOT DONE
 
-// Your task is to complete this implementation and return an Ok result of inner
-// type Color. You need to create an implementation for a tuple of three
-// integers, an array of three integers, and a slice of integers.
-//
-// Note that the implementation for tuple and array will be checked at compile
-// time, but the slice implementation needs to check the slice length! Also note
-// that correct RGB color values must be integers in the 0..=255 range.
+//您的任务是完成此实现并返回内部的Ok结果
+//类型颜色。您需要为三元组创建一个实现
+//整数、三个整数的数组和一个整数切片。
 
-// Tuple implementation
+//请注意，元组和数组的实现将在编译时检查
+//时间，但切片实现需要检查切片长度！另请注意
+//正确的RGB颜色值必须是0..=255范围内的整数。
+
+//双重实施
 impl TryFrom<(i16, i16, i16)> for Color {
     type Error = IntoColorError;
     fn try_from(tuple: (i16, i16, i16)) -> Result<Self, Self::Error> {
+        if tuple.0 >= 0
+            && tuple.0 <= 255
+            && tuple.1 >= 0
+            && tuple.1 <= 255
+            && tuple.2 >= 0
+            && tuple.2 <= 255
+        {
+            return Ok(Color {
+                red: tuple.0 as u8,
+                green: tuple.1 as u8,
+                blue: tuple.2 as u8,
+            });
+        }
+        Err(IntoColorError::IntConversion)
     }
 }
 
-// Array implementation
+//数组实现
 impl TryFrom<[i16; 3]> for Color {
     type Error = IntoColorError;
     fn try_from(arr: [i16; 3]) -> Result<Self, Self::Error> {
+        if arr[0] >= 0
+            && arr[0] <= 255
+            && arr[1] >= 0
+            && arr[1] <= 255
+            && arr[2] >= 0
+            && arr[2] <= 255
+        {
+            return Ok(Color {
+                red: arr[0] as u8,
+                green: arr[1] as u8,
+                blue: arr[2] as u8,
+            });
+        }
+        Err(IntoColorError::IntConversion)
     }
 }
 
-// Slice implementation
+//切片实施
 impl TryFrom<&[i16]> for Color {
     type Error = IntoColorError;
     fn try_from(slice: &[i16]) -> Result<Self, Self::Error> {
+        if slice.len() != 3 {
+            return Err(IntoColorError::BadLen);
+        } else {
+            if slice[0] >= 0
+                && slice[0] <= 255
+                && slice[1] >= 0
+                && slice[1] <= 255
+                && slice[2] >= 0
+                && slice[2] <= 255
+            {
+                return Ok(Color {
+                    red: slice[0] as u8,
+                    green: slice[1] as u8,
+                    blue: slice[2] as u8,
+                });
+            }
+            Err(IntoColorError::IntConversion)
+        }
     }
 }
 
 fn main() {
-    // Use the `try_from` function
+    //使用`try_from`函数
     let c1 = Color::try_from((183, 65, 14));
     println!("{:?}", c1);
 
-    // Since TryFrom is implemented for Color, we should be able to use TryInto
+    //由于TryFrom是为Color实现的，我们应该能够使用TryInto
     let c2: Result<Color, _> = [183, 65, 14].try_into();
     println!("{:?}", c2);
 
     let v = vec![183, 65, 14];
-    // With slice we should use `try_from` function
+    //对于slice，我们应该使用`try_from`函数
     let c3 = Color::try_from(&v[..]);
     println!("{:?}", c3);
-    // or take slice within round brackets and use TryInto
+    //或者将切片放在圆括号内，然后使用TryInto
     let c4: Result<Color, _> = (&v[..]).try_into();
     println!("{:?}", c4);
 }

@@ -1,38 +1,38 @@
 // tests5.rs
 //
-// An `unsafe` in Rust serves as a contract.
+//Rust中的“unsafe”充当合约。
 //
-// When `unsafe` is marked on an item declaration, such as a function,
-// a trait or so on, it declares a contract alongside it. However,
-// the content of the contract cannot be expressed only by a single keyword.
-// Hence, its your responsibility to manually state it in the `# Safety`
-// section of your documentation comment on the item.
+//当在诸如函数之类的项目声明上标记“不安全”时，
+//如果它具有某种特征等，它会在旁边声明一份合同。然而，
+//合同的内容不能仅由一个关键字来表达。
+// 因此，您有责任在 `# Safety`
+// 文档中关于该项目的注释部分。
 //
-// When `unsafe` is marked on a code block enclosed by curly braces,
-// it declares an observance of some contract, such as the validity of some
-// pointer parameter, the ownership of some memory address. However, like
-// the text above, you still need to state how the contract is observed in
-// the comment on the code block.
+//当在花括号括起来的代码块上标记“unsafe”时，
+//它声明遵守某些合同，例如某些合同的有效性
+//指针参数，某个内存地址的所有权。然而，就像
+//在上面的文本中，您仍然需要说明如何遵守合同
+//代码块上的注释。
 //
-// NOTE: All the comments are for the readability and the maintainability of
-// your code, while the Rust compiler hands its trust of soundness of your
-// code to yourself! If you cannot prove the memory safety and soundness of
-// your own code, take a step back and use safe code instead!
+//注：所有注释都是为了可读性和可维护性
+//您的代码，而Rust编译器则信任您的代码的可靠性
+//代码给自己！如果你不能证明记忆的安全性和可靠性
+//你自己的代码，退一步，使用安全代码！
 //
-// Execute `rustlings hint tests5` or use the `hint` watch subcommand for a
-// hint.
+//执行`rustlings hint tests5`或使用`hint` watch子命令
+//提示。
 
-// I AM NOT DONE
 
 /// # Safety
 ///
-/// The `address` must contain a mutable reference to a valid `u32` value.
-unsafe fn modify_by_address(address: usize) {
-    // TODO: Fill your safety notice of the code block below to match your
-    // code's behavior and the contract of this function. You may use the
-    // comment of the test below as your format reference.
+///“address”必须包含对有效“u32”值的可变引用。
+unsafe fn modify_by_address(mut address: usize) {
+    //TODO:填写下面代码块的安全通知，以匹配您的
+    //代码的行为和此函数的契约。您可以使用
+    //下面的测试注释作为您的格式参考。
     unsafe {
-        todo!("Your code goes here")
+        let mut p = address as *mut u32;
+        *p = 0xAABBCCDD;
     }
 }
 
@@ -43,9 +43,9 @@ mod tests {
     #[test]
     fn test_success() {
         let mut t: u32 = 0x12345678;
-        // SAFETY: The address is guaranteed to be valid and contains
-        // a unique reference to a `u32` local variable.
+        //安全：地址保证有效，并包含
+        //对“u32”局部变量的唯一引用。
         unsafe { modify_by_address(&mut t as *mut u32 as usize) };
-        assert!(t == 0xAABBCCDD);
+        assert_eq!(t, 0xAABBCCDD);
     }
 }

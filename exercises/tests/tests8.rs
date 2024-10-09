@@ -1,13 +1,12 @@
 // tests8.rs
 //
-// This execrise shares `build.rs` with the previous exercise.
-// You need to add some code to `build.rs` to make both this exercise and
-// the previous one work.
+//这个execrise与前一个练习共享“build.rs”。
+//您需要在`build.rs`中添加一些代码，以便进行此练习和
+//前一项工作。
 //
 // Execute `rustlings hint tests8` or use the `hint` watch subcommand for a
 // hint.
 
-// I AM NOT DONE
 
 fn main() {}
 
