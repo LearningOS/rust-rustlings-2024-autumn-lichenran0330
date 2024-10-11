@@ -1,8 +1,7 @@
 /*
-	heap
-	This question requires you to implement a binary heap function
+    heap
+    This question requires you to implement a binary heap function
 */
-// I AM NOT DONE
 
 use std::cmp::Ord;
 use std::default::Default;
@@ -37,28 +36,29 @@ where
     }
 
     pub fn add(&mut self, value: T) {
-        //TODO
-    }
-
-    fn parent_idx(&self, idx: usize) -> usize {
-        idx / 2
-    }
-
-    fn children_present(&self, idx: usize) -> bool {
-        self.left_child_idx(idx) <= self.count
-    }
-
-    fn left_child_idx(&self, idx: usize) -> usize {
-        idx * 2
-    }
-
-    fn right_child_idx(&self, idx: usize) -> usize {
-        self.left_child_idx(idx) + 1
+        self.items.push(value);
+        self.count += 1;
+        let mut index = self.count >> 1;
+        while index >= 1 {
+            let child = self.smallest_child_idx(index);
+            if (self.comparator)(&self.items[child], &self.items[index]) {
+                self.items.swap(child, index);
+                index >>= 1;
+            } else {
+                break;
+            }
+        }
     }
 
     fn smallest_child_idx(&self, idx: usize) -> usize {
-        //TODO
-		0
+        if (idx << 1 | 1) <= self.count {
+            if (self.comparator)(&self.items[idx << 1], &self.items[idx << 1 | 1]) {
+                return idx << 1;
+            } else {
+                return idx << 1 | 1;
+            }
+        }
+        idx << 1
     }
 }
 
@@ -79,13 +79,27 @@ where
 
 impl<T> Iterator for Heap<T>
 where
-    T: Default,
+    T: Default + Clone,
 {
     type Item = T;
 
     fn next(&mut self) -> Option<T> {
-        //TODO
-		None
+        if self.is_empty() {
+            return None;
+        }
+        self.items.swap(1, self.count);
+        self.count -= 1;
+        let mut index = 1;
+        while (index << 1) <= self.count {
+            let child = self.smallest_child_idx(index);
+            if (self.comparator)(&self.items[child], &self.items[index]) {
+                self.items.swap(child, index);
+                index <<= 1;
+            } else {
+                break;
+            }
+        }
+        return Some(self.items.pop().unwrap());
     }
 }
 

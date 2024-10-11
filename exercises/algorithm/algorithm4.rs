@@ -3,7 +3,6 @@
 	This problem requires you to implement a basic interface for a binary tree
 */
 
-//I AM NOT DONE
 use std::cmp::Ordering;
 use std::fmt::Debug;
 
@@ -50,13 +49,34 @@ where
 
     // Insert a value into the BST
     fn insert(&mut self, value: T) {
-        //TODO
+        let mut node = &mut self.root;
+        while let Some(x) = node {
+            if (*x).value == value {
+                return;
+            }
+            if (*x).value < value {
+                node = &mut (*x).left;
+            } else {
+                node = &mut (*x).right;
+            }
+        }
+        *node = Some(Box::new(TreeNode::new(value)));
     }
 
     // Search for a value in the BST
     fn search(&self, value: T) -> bool {
-        //TODO
-        true
+        let mut node = &self.root;
+        while let Some(x) = node {
+            if (*x).value == value {
+                return true;
+            }
+            if (*x).value < value {
+                node = &(*x).left;
+            } else {
+                node = &(*x).right;
+            }
+        }
+        return false;
     }
 }
 
@@ -66,7 +86,7 @@ where
 {
     // Insert a node into the tree
     fn insert(&mut self, value: T) {
-        //TODO
+        *self = TreeNode::new(value);
     }
 }
 
